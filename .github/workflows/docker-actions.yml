@@ -28,9 +28,10 @@ jobs:
       - name: Build Docker images with docker-compose
         run: |
           docker compose -f docker-compose.yml build
-          docker tag astousmk/laravel_image:latest faye2908/laravel_image:${{ env.SHA_SHORT }}
+          docker tag astousmk/laravel_image:latest astou/laravel_image:${{ env.SHA_SHORT }}
 
       - name: Push images to Docker Hub
         run: |
           docker compose -f docker-compose.yml push
+          docker push astousmk/laravel_image:latest
           docker push astousmk/laravel_image:${{ env.SHA_SHORT }}
