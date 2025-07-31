@@ -14,14 +14,16 @@ RUN apt-get update && apt-get install -y \
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copier les fichiers du projet dans le conteneur
+# Copier les fichiers du projet Laravel
 COPY . /var/www
 WORKDIR /var/www
 
 # Donner les permissions au dossier
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage /var/www/bootstrap/cache
 
-EXPOSE 8000
+# Exposer le port FastCGI (9000)
+EXPOSE 9000
 
-# Lancer le serveur Laravel
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Lancer PHP-FPM (FastCGI)
+CMD ["php-fpm"]
