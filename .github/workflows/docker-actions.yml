@@ -9,28 +9,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 📥 Checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: ⚙️ Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: 🔐 Log in to Docker Hub
+      - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: 🏷️ Extract Git commit SHA
+      - name: Extract Git commit SHA
         id: vars
         run: echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: 🏗️ Build Docker images with docker-compose
+      - name: Build Docker images with docker-compose
         run: |
           docker compose -f docker-compose.yml build
-          docker tag astousmk/laravel_image:latest astou/laravel_image:${{ env.SHA_SHORT }}
+          docker tag astousmk/laravel_image:latest astousmk/laravel_image:${{ env.SHA_SHORT }}
 
-      - name: 🚀 Push images to Docker Hub
-          run: |
-          docker push astousmk/laravel_image:latest
-          docker push astou/laravel_image:${{ env.SHA_SHORT }}
+      - name: Push images to Docker Hub
+        run: |
+          docker compose -f docker-compose.yml push
+          docker push astousmk/laravel_image:${{ env.SHA_SHORT }}
