@@ -5,7 +5,7 @@ services:
     build:
      context: .
      dockerfile: Dockerfile
-    image: faye2908/laravel_image:latest
+    image: astousmk/laravel_image:latest
     container_name: laravel-app
     working_dir: /var/www
     volumes:
@@ -46,7 +46,7 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@ipp.local
+      PGADMIN_DEFAULT_EMAIL: admin@test.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "8080:80"
