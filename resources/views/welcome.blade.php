@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>BurgerApp - Livraison de Burgers</title>
+    <title>BurgerIpp - Livraison de Burgers</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -276,7 +276,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('burger') }}">
             <div class="brand-icon">🍔</div>
-            BurgerApp
+            BurgerIpp
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

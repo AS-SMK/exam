@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +27,15 @@ use Illuminate\Support\Facades\Route;
     // } else {
     //     return redirect()->route('burger');
     // }
+
+
+    Route::get('/test-mailtrap', function () {
+    Mail::raw('Test Mailtrap', function ($message) {
+        $message->to('client@example.com')->subject('Test Laravel Mailtrap');
+    });
+    return 'Email envoyé vers Mailtrap';  // <-- point-virgule ajouté ici
+});
+
 
 Route::get('/',[\App\Http\Controllers\BurgerController::class,'index'])->name('burger');
 
@@ -69,6 +81,9 @@ Route::delete('/deleteCommande/{id}',[\App\Http\Controllers\CommandeController::
 // Route::get('/editCommande/{id}',[\App\Http\Controllers\CommandeController::class,'edit'])->name('editCommande');
 Route::put('/updateCommande/{id}',[\App\Http\Controllers\CommandeController::class,'update'])->name('updateCommande');
 Route::get('/showCommande/{id}',[\App\Http\Controllers\CommandeController::class,'show'])->name('showCommande');
+
+
+
 
     Route::post('/burger/{burger}/add-to-cart', [\App\Http\Controllers\BurgerController::class, 'addToCart'])->name('burger.addToCart');
     Route::get('/cart', [\App\Http\Controllers\CardController::class, 'show'])->name('cart.show');

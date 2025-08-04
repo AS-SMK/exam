@@ -34,29 +34,36 @@ class CommandeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-        $commande = new Commande([
-            'user_id' => auth()->id(),
-            'statut' => 'en_attente',
-            'total' => $burger->prix * $request->input('quantite', 1),
-        ]);
+   public function store(Request $request)
+{
+    // Création de la commande vide
+    $commande = new Commande();
+    $commande->user_id = auth()->id();
+    $commande->statut = 'en_attente';
+    $commande->total = 0;
+    $commande->save();
 
-        $commande->save();
-
-        // Ajouter les burgers à la commande et calculer le total
-        foreach ($request->input('burgers') as $burgerId) {
-            $burger = Burger::find($burgerId);
-            $commande->burgers()->attach($burger);
-            $commande->total += $burger->prix;
-        }
-        $commande->update(['total' => $commande->total]);
-
-         Mail::to(auth()->user()->email)->send(new CommandeConfirmee($commande));
-
-    return redirect()->route('commande')->with('success', 'Commande créée et email envoyé.');
+    // Ajouter les burgers à la commande et calculer le total
+    foreach ($request->input('burgers') as $burgerId) {
+        $burger = Burger::findOrFail($burgerId);
+        $commande->burgers()->attach($burgerId, ['quantite' => 1]); // ou récupère la vraie quantité
+        $commande->total += $burger->prix;
     }
+
+    // Mettre à jour le total
+    $commande->save();
+
+    // 1️⃣ Email au client
+    Mail::to($commande->user->email)->send(new CommandeConfirmee($commande));
+
+    // 2️⃣ Email au(x) gestionnaire(s)
+    $gestionnaires = \App\Models\User::where('role', 'gestionnaire')->get();
+    foreach ($gestionnaires as $gestionnaire) {
+        $gestionnaire->notify(new NewOrderNotification($commande));
+    }
+
+    return redirect()->route('commande')->with('success', 'Commande créée, email client et notification gestionnaire envoyés.');
+}
 
     /**
      * Display the specified resource.
